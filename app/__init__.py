@@ -21,7 +21,7 @@ csrf = CSRFProtect()
 limiter = Limiter(key_func=get_remote_address, storage_uri="memory://")
 
 
-def create_app():
+def create_app(test_config=None):
     app = Flask(__name__)
 
     app.config.update(
@@ -32,6 +32,8 @@ def create_app():
         SESSION_COOKIE_SAMESITE="Lax",
         PERMANENT_SESSION_LIFETIME=timedelta(minutes=15),
     )
+    if test_config:
+        app.config.update(test_config)
 
     db.init_app(app)
     bcrypt.init_app(app)
